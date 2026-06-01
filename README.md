@@ -1,8 +1,14 @@
 # kintsugi-math
 
-> The mathematics of beautiful error recovery — for JavaScript/TypeScript.
+> The mathematics of beautiful error recovery for JavaScript — golden seams, fragment reassembly, and aesthetic fault tolerance.
 
-In [kintsugi](https://en.wikipedia.org/wiki/Kintsugi), broken pottery is repaired with gold lacquer, making the cracks beautiful rather than hidden. This library brings that philosophy to software: transform errors into **golden seams**, reassemble **fragmented data**, map **crack propagation** graphs, measure **wabi-sabi** aesthetics, and test **resilience**.
+## What This Does
+
+`kintsugi-math` brings the Japanese art of kintsugi to JavaScript: transform errors into structured recovery objects ("golden seams"), reassemble fragmented partial data, model crack propagation in dependency graphs, measure resilience, and compute aesthetic scores for error recovery. Use it for graceful degradation in web apps, resilience testing, or building fault-tolerant systems.
+
+## The Cultural Root
+
+See the Python version (`kintsugi-math` on PyPI) for the full cultural background. Kintsugi teaches that breakage is part of an object's history — repairs should be beautiful, not hidden.
 
 ## Install
 
@@ -14,91 +20,66 @@ npm install kintsugi-math
 
 ```typescript
 import {
-  goldenRepair,
-  repairTraceback,
-  FragmentCollection,
-  entropyOfErrors,
-  goldenRatio,
-  aestheticScore,
-  buildCrackGraph,
-  findGoldenJoints,
-  shortestCrackPath,
-  injectFaults,
-  measureRecovery,
+  GoldenSeam, repairError,
+  FragmentCollection, reassemble,
+  CrackGraph, measureResilience,
+  wabiSabiEntropy, aestheticScore, goldenRatio,
+  WabiSabiReport,
 } from "kintsugi-math";
 
-// Transform an error into a golden seam
-const seam = goldenRepair(new TypeError("not a function"));
-console.log(seam.severity);    // number 0-10
-console.log(seam.position);    // "TypeError: not a function"
-console.log(seam.repairQuality); // "Ensure correct argument types..."
+// Transform errors into golden seams
+try {
+  riskyOperation();
+} catch (e) {
+  const seam = repairError(e);
+  console.log(seam.severity, seam.suggestion);
+}
 
-// Reassemble fragmented data
-const coll = new FragmentCollection();
-coll.add([1, 2, 3], 0.9, 0);
-coll.add([7, 8], 0.7, 5);
-const whole = coll.reassemble(); // fills gaps with interpolation
+// Reassemble fragments
+const fc = new FragmentCollection();
+fc.add({ data: [1, 2], confidence: 0.9, offset: 0 });
+fc.add({ data: [3, 4], confidence: 0.7, offset: 2 });
+fc.add({ data: [5], confidence: 0.3, offset: 4 });
+const result = reassemble(fc, 5);
 
-// Measure wabi-sabi aesthetics
-const entropy = entropyOfErrors(["TypeError", "RangeError", "TypeError"]);
-const beauty = goldenRatio(1.618, 1.0); // ≈ 1.0
-const score = aestheticScore([1, 2, null, 4]); // 0 < score < 1
+// Wabi-sabi aesthetics
+const entropy = wabiSabiEntropy(["ValueError", "TypeError", "ValueError"]);
+const score = aestheticScore([1, 2, 3, null, 5]);
+const ratio = goldenRatio(8, 5);
 
-// Build crack propagation graphs
-const graph = buildCrackGraph([
-  { source: "database", target: "api" },
-  { source: "api", target: "frontend" },
-]);
-const joints = findGoldenJoints(graph); // highest-impact repair points
-const path = shortestCrackPath(graph, "database", "frontend");
-
-// Test resilience
-const { results, faultCount } = injectFaults(() => compute(), 0.2);
-const report = measureRecovery(recoverFromError, [err1, err2, err3]);
-console.log(report.recoveryRate); // 0-1
+// Crack propagation
+const graph = new CrackGraph();
+graph.addCrack("db", "api", 0.8);
+graph.addCrack("api", "ui", 0.6);
+const resilience = measureResilience(graph);
 ```
 
-## API
+## API Reference
 
-### Types
+### Golden Seams
+- `GoldenSeam { severity, position, repairQuality }`
+- `repairError(error: unknown) → GoldenSeam`
+- `severityScore(error: unknown) → number`
 
-- **`GoldenSeam`** — `{ severity, position, repairQuality }` — A repair point extracted from an error.
-- **`Fragment`** — `{ data, confidence, offset }` — A piece of partial data.
-- **`CrackGraph`** — `{ nodes, edges, errorCounts, edgeWeights }` — Directed error propagation graph.
-- **`GoldenJoint`** — `{ node, impact, beauty }` — High-impact repair point in a crack graph.
-- **`WabiSabiReport`** — `{ entropy, ratio, score, imperfections, description }` — Imperfection metrics.
-- **`ResilienceReport`** — `{ recoveryRate, meanTimeToRepair, aestheticQuality, totalFaults, successfulRecoveries }` — Recovery stats.
+### Fragments
+- `FragmentCollection` — `add()`, `sorted()`, `size`
+- `reassemble(collection, targetLength) → number[]`
 
-### goldenRepair
+### Wabi-Sabi
+- `wabiSabiEntropy(errors: string[]) → number` — Shannon entropy
+- `goldenRatio(recovered, lost) → number` — Closeness to φ
+- `aestheticScore(data: unknown) → number` — 0–1 beauty score
+- `WabiSabiReport { entropy, ratio, score, imperfections }`
 
-- `goldenRepair(error)` → `GoldenSeam`
-- `repairTraceback(error)` → `GoldenSeam[]`
-- `severityScore(error)` → `number` (0–10)
+### Crack Propagation
+- `CrackGraph` — `addCrack()`, `propagateFrom()`, `measureResilience()`
 
-### FragmentCollection
+### Resilience
+- `measureResilience(graph, joints) → number`
 
-- `new FragmentCollection()`
-- `.add(data, confidence, offset)`
-- `.sort()` — sort by confidence (descending)
-- `.reasemble()` → `number[]` — fills gaps with confidence-weighted interpolation
-- `.length`, `.totalConfidence`, `.averageConfidence`
+## How It Works
 
-### wabiSabi
-
-- `entropyOfErrors(errors)` → `number` (Shannon entropy in bits)
-- `goldenRatio(recovered, lost)` → `number` (0–1, closeness to φ)
-- `aestheticScore(data)` → `number` (0–1)
-
-### cracks
-
-- `buildCrackGraph(errors)` → `CrackGraph`
-- `findGoldenJoints(graph)` → `GoldenJoint[]`
-- `shortestCrackPath(graph, source, target)` → `string[] | null`
-
-### resilience
-
-- `injectFaults(fn, faultRate)` → `{ results, faultCount }`
-- `measureRecovery(system, faults)` → `ResilienceReport`
+Same algorithms as the Python version. Golden seams extract metadata from errors. Fragment reassembly uses confidence-weighted interpolation. Wabi-sabi metrics combine Shannon entropy, golden ratio proximity, and completeness scoring.
 
 ## License
 
