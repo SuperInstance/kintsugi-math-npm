@@ -1,0 +1,24 @@
+{
+  "name": "kintsugi-math",
+  "version": "1.0.0",
+  "description": "The mathematics of beautiful error recovery — golden seams, fragment reassembly, crack graphs, wabi-sabi metrics, and resilience testing for JavaScript/TypeScript.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test dist/test/*.test.js",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": ["kintsugi", "error-recovery", "resilience", "wabi-sabi", "golden-ratio", "fragments", "fault-injection"],
+  "author": "SuperInstance",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SuperInstance/kintsugi-math-npm.git"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "@types/node": "^22.0.0"
+  }
+}
