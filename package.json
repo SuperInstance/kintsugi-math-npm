@@ -1,7 +1,7 @@
 {
   "name": "kintsugi-math",
   "version": "1.0.1",
-  "description": "The mathematics of beautiful error recovery \u2014 golden seams, fragment reassembly, crack graphs, wabi-sabi metrics, and resilience testing for JavaScript/TypeScript.",
+  "description": "The mathematics of beautiful error recovery — golden seams, fragment reassembly, crack graphs, wabi-sabi metrics, and resilience testing for JavaScript/TypeScript.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "test": "node --test dist/test/*.test.js",
+    "test": "tsc -p tsconfig.test.json && node --test dist-test/test/*.test.js",
     "prepublishOnly": "npm run build"
   },
   "keywords": [
